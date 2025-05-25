@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobsy AI Pro - Authentication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .floating-shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .floating-shape:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 10%;
+            right: 30%;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Main Container */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .auth-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .auth-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
+        }
+
+        .auth-content {
+            padding: clamp(30px, 6vw, 50px);
+        }
+
+        /* Header */
+        .auth-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .auth-logo {
+            font-size: clamp(32px, 7vw, 42px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .auth-subtitle {
+            color: #666;
+            font-size: clamp(14px, 3.5vw, 18px);
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .auth-description {
+            color: #888;
+            font-size: clamp(12px, 3vw, 14px);
+            line-height: 1.5;
+        }
+
+        /* Role Selection */
+        .role-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .role-card {
+            padding: 20px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .role-card:hover::before {
+            left: 100%;
+        }
+
+        .role-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .role-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.25);
+        }
+
+        .role-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .role-title {
+            font-weight: 700;
+            margin-bottom: 6px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            color: #333;
+        }
+
+        .role-desc {
+            font-size: clamp(11px, 2.8vw, 13px);
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* Auth Tabs */
+        .auth-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 6px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 14px 20px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: clamp(13px, 3.2vw, 15px);
+            border: none;
+            background: transparent;
+            color: #666;
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* Forms */
+        .auth-form {
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: clamp(13px, 3.2vw, 15px);
+        }
+
+        .form-input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            color: #333;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-input.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
+        }
+
+        .form-input.success {
+            border-color: #28a745;
+            box-shadow: 0 0 0 4px rgba(40, 167, 69, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #666;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .form-input:focus + .input-icon {
+            color: #667eea;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 18px;
+            color: #666;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #667eea;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: all 0.3s ease;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: clamp(14px, 3.5vw, 18px) clamp(24px, 6vw, 32px);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: clamp(14px, 3.5vw, 16px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 2px solid #e9ecef;
+            margin-bottom: 12px;
+        }
+
+        .btn-google:hover {
+            background: #f8f9fa;
+            border-color: #4285f4;
+            color: #4285f4;
+        }
+
+        .btn-linkedin {
+            background: #0077b5;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .btn-linkedin:hover {
+            background: #005885;
+            transform: translateY(-2px);
+        }
+
+        .btn-github {
+            background: #333;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .btn-github:hover {
+            background: #24292e;
+            transform: translateY(-2px);
+        }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e9ecef, transparent);
+        }
+
+        .divider span {
+            padding: 0 20px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Checkbox and Links */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+            margin-top: 2px;
+        }
+
+        .checkbox-group label {
+            font-size: clamp(12px, 3vw, 14px);
+            color: #666;
+            cursor: pointer;
+            line-height: 1.5;
+        }
+
+        .checkbox-group a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: clamp(13px, 3.2vw, 15px);
+            font-weight: 600;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .auth-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e9ecef;
+            font-size: clamp(13px, 3.2vw, 15px);
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: clamp(13px, 3.2vw, 15px);
+            font-weight: 500;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.warning {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .message.info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* Loading States */
+        .loading {
+            display: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .btn-text {
+            transition: opacity 0.3s ease;
+        }
+
+        .btn.loading .btn-text {
+            opacity: 0;
+        }
+
+        .btn.loading .loading {
+            display: block;
+        }
+
+        /* Strength Meter */
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .strength-bar {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: #dc3545; width: 25%; }
+        .strength-fair { background: #ffc107; width: 50%; }
+        .strength-good { background: #28a745; width: 75%; }
+        .strength-strong { background: #20c997; width: 100%; }
+
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        /* Company Field Animation */
+        .company-field {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .company-field.show {
+            max-height: 100px;
+            opacity: 1;
+            margin-bottom: 22px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-container {
+                padding: 15px;
+            }
+            
+            .auth-wrapper {
+                max-width: 100%;
+                border-radius: 20px;
+            }
+            
+            .auth-content {
+                padding: 25px 20px;
+            }
+            
+            .role-selection {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .role-card {
+                padding: 18px 15px;
+            }
+            
+            .auth-tabs {
+                flex-direction: column;
+                gap: 6px;
+            }
+            
+            .auth-tab {
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: 10px;
+            }
+            
+            .auth-content {
+                padding: 20px 15px;
+            }
+            
+            .form-input {
+                padding: 14px 18px 14px 45px;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+            }
+            
+            .floating-shape {
+                display: none;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus States */
+        .btn:focus,
+        .form-input:focus,
+        .form-select:focus,
+        .role-card:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        /* High Contrast Mode */
+        @media (prefers-contrast: high) {
+            .auth-wrapper {
+                border: 3px solid #333;
+            }
+            
+            .btn-primary {
+                background: #000;
+                border: 2px solid #fff;
+            }
+            
+            .form-input {
+                border-width: 3px;
+            }
+        }
+
+        /* Success Animation */
+        .success-checkmark {
+            display: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #28a745;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .success-checkmark.show {
+            display: block;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        .success-checkmark::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+    </div>
+
+    <!-- Main Authentication Container -->
+    <div class="auth-container">
+        <div class="auth-wrapper">
+            <div class="auth-content">
+                <!-- Header -->
+                <div class="auth-header">
+                    <div class="auth-logo">
+                        💼 Jobsy 
+                    </div>
+                    <div class="auth-subtitle">AI-Powered Hiring Platform</div>
+                    <div class="auth-description">
+                        Join thousands of companies and professionals revolutionizing recruitment with AI
+                    </div>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="role-selection">
+                    <div class="role-card selected" onclick="selectRole('candidate', this)" data-role="candidate">
+                        <span class="role-icon">👤</span>
+                        <div class="role-title">Job Seeker</div>
+                        <div class="role-desc">Find your dream job with AI-powered matching</div>
+                    </div>
+                    <div class="role-card" onclick="selectRole('hr', this)" data-role="hr">
+                        <span class="role-icon">👔</span>
+                        <div class="role-title">HR Professional</div>
+                        <div class="role-desc">Streamline hiring with intelligent automation</div>
+                    </div>
+                </div>
+
+                <!-- Auth Tabs -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="showAuthTab('signin')">Sign In</button>
+                    <button class="auth-tab" onclick="showAuthTab('signup')">Create Account</button>
+                </div>
+
+                <!-- Messages -->
+                <div id="messageContainer"></div>
+
+                <!-- Sign In Form -->
+                <form id="signinForm" class="auth-form active">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <div class="form-input-wrapper">
+                            <input type="email" class="form-input" id="signinEmail" placeholder="Enter your email address" required>
+                            <span class="input-icon">📧</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrapper">
+                            <input type="password" class="form-input" id="signinPassword" placeholder="Enter your password" required>
+                            <span class="input-icon">🔒</span>
+                            <span class="password-toggle" onclick="togglePassword('signinPassword')">👁️</span>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Keep me signed in for 30 days</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Sign In to Dashboard</span>
+                        <div class="loading"></div>
+                    </button>
+
+                    <div class="forgot-password">
+                        <a href="#" onclick="showForgotPassword()">Forgot your password?</a>
+                    </div>
+
+                    <div class="divider">
+                        <span>or continue with</span>
+                    </div>
+
+                    <button type="button" class="btn btn-google" onclick="signInWithProvider('google')">
+                        <span>🔍</span>
+                        <span>Continue with Google</span>
+                    </button>
+
+                    <button type="button" class="btn btn-linkedin" onclick="signInWithProvider('linkedin')">
+                        <span>💼</span>
+                        <span>Continue with LinkedIn</span>
+                    </button>
+
+                    <button type="button" class="btn btn-github" onclick="signInWithProvider('github')">
+                        <span>🐙</span>
+                        <span>Continue with GitHub</span>
+                    </button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signupForm" class="auth-form">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <div class="form-input-wrapper">
+                            <input type="text" class="form-input" id="signupName" placeholder="Enter your full name" required>
+                            <span class="input-icon">👤</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <div class="form-input-wrapper">
+                            <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email address" required>
+                            <span class="input-icon">📧</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group company-field" id="companyField">
+                        <label class="form-label">Company Name</label>
+                        <div class="form-input-wrapper">
+                            <input type="text" class="form-input" id="signupCompany" placeholder="Enter your company name">
+                            <span class="input-icon">🏢</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Job Title / Position</label>
+                        <div class="form-input-wrapper">
+                            <input type="text" class="form-input" id="signupPosition" placeholder="e.g. Software Engineer, HR Manager" required>
+                            <span class="input-icon">💼</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Experience Level</label>
+                        <select class="form-select" id="signupExperience" required>
+                            <option value="">Select your experience level</option>
+                            <option value="entry">Entry Level (0-2 years)</option>
+                            <option value="mid">Mid Level (3-5 years)</option>
+                            <option value="senior">Senior Level (5-8 years)</option>
+                            <option value="lead">Lead/Principal (8+ years)</option>
+                            <option value="executive">Executive/C-Level</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <div class="form-input-wrapper">
+                            <input type="password" class="form-input" id="signupPassword" placeholder="Create a strong password" required>
+                            <span class="input-icon">🔒</span>
+                            <span class="password-toggle" onclick="togglePassword('signupPassword')">👁️</span>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="strength-bar"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <div class="form-input-wrapper">
+                            <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
+                            <span class="input-icon">🔒</span>
+                            <span class="password-toggle" onclick="togglePassword('confirmPassword')">👁️</span>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">
+                            I agree to the <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>
+                        </label>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="emailUpdates">
+                        <label for="emailUpdates">
+                            Send me updates about new features, job opportunities, and industry insights
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Create My Account</span>
+                        <div class="loading"></div>
+                    </button>
+
+                    <div class="divider">
+                        <span>or sign up with</span>
+                    </div>
+
+                    <button type="button" class="btn btn-google" onclick="signUpWithProvider('google')">
+                        <span>🔍</span>
+                        <span>Sign up with Google</span>
+                    </button>
+
+                    <button type="button" class="btn btn-linkedin" onclick="signUpWithProvider('linkedin')">
+                        <span>💼</span>
+                        <span>Sign up with LinkedIn</span>
+                    </button>
+
+                    <button type="button" class="btn btn-github" onclick="signUpWithProvider('github')">
+                        <span>🐙</span>
+                        <span>Sign up with GitHub</span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="auth-footer">
+                    <span id="authFooterText">
+                        Don't have an account? <a href="#" onclick="showAuthTab('signup')">Create one here</a>
+                    </span>
+                </div>
+
+                <!-- Success Animation -->
+                <div class="success-checkmark" id="successCheckmark"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedRole = 'candidate';
+        let currentAuthTab = 'signin';
+
+        // Demo credentials for testing
+        const demoCredentials = {
+            candidate: { email: 'candidate@demo.com', password: 'demo123' },
+            hr: { email: 'hr@demo.com', password: 'demo123' }
+        };
+
+        // Role Selection
+        function selectRole(role, element) {
+            selectedRole = role;
+            
+            // Update visual selection
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            // Show/hide company field for HR role
+            const companyField = document.getElementById('companyField');
+            const companyInput = document.getElementById('signupCompany');
+            
+            if (role === 'hr') {
+                companyField.classList.add('show');
+                companyInput.required = true;
+            } else {
+                companyField.classList.remove('show');
+                companyInput.required = false;
+            }
+            
+            // Update form placeholders based on role
+            updateFormPlaceholders(role);
+        }
+
+        function updateFormPlaceholders(role) {
+            const positionInput = document.getElementById('signupPosition');
+            
+            if (role === 'hr') {
+                positionInput.placeholder = 'e.g. HR Manager, Talent Acquisition Specialist';
+            } else {
+                positionInput.placeholder = 'e.g. Software Engineer, UX Designer';
+            }
+        }
+
+        // Tab Management
+        function showAuthTab(tab) {
+            currentAuthTab = tab;
+            
+            // Update tab buttons
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update forms
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            document.getElementById(tab + 'Form').classList.add('active');
+            
+            // Update footer text
+            const footerText = document.getElementById('authFooterText');
+            if (tab === 'signin') {
+                footerText.innerHTML = 'Don\'t have an account? <a href="#" onclick="showAuthTab(\'signup\')">Create one here</a>';
+            } else {
+                footerText.innerHTML = 'Already have an account? <a href="#" onclick="showAuthTab(\'signin\')">Sign in here</a>';
+            }
+            
+            clearMessages();
+        }
+
+        // Password Management
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.parentElement.querySelector('.password-toggle');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                toggle.textContent = '👁️';
+            }
+        }
+
+        function checkPasswordStrength(password) {
+            const strengthMeter = document.getElementById('passwordStrength');
+            const strengthBar = strengthMeter.querySelector('.strength-bar');
+            const strengthText = document.getElementById('strengthText');
+            
+            if (password.length === 0) {
+                strengthMeter.classList.remove('show');
+                return;
+            }
+            
+            strengthMeter.classList.add('show');
+            
+            let score = 0;
+            let feedback = '';
+            
+            // Length check
+            if (password.length >= 8) score++;
+            if (password.length >= 12) score++;
+            
+            // Character variety checks
+            if (/[a-z]/.test(password)) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+            
+            // Set strength level
+            strengthBar.className = 'strength-bar';
+            if (score <= 2) {
+                strengthBar.classList.add('strength-weak');
+                feedback = 'Weak - Add more characters and variety';
+            } else if (score <= 4) {
+                strengthBar.classList.add('strength-fair');
+                feedback = 'Fair - Consider adding special characters';
+            } else if (score <= 5) {
+                strengthBar.classList.add('strength-good');
+                feedback = 'Good - Strong password';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                feedback = 'Excellent - Very strong password';
+            }
+            
+            strengthText.textContent = feedback;
+            strengthText.style.color = score <= 2 ? '#dc3545' : score <= 4 ? '#ffc107' : '#28a745';
+        }
+
+        // Message System
+        function showMessage(message, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type} show`;
+            messageDiv.innerHTML = `
+                <strong>${type === 'error' ? '❌ Error!' : type === 'success' ? '✅ Success!' : type === 'warning' ? '⚠️ Warning!' : 'ℹ️ Info'}</strong>
+                ${message}
+            `;
+            
+            container.innerHTML = '';
+            container.appendChild(messageDiv);
+            
+            // Auto-hide after 5 seconds for non-error messages
+            if (type !== 'error') {
+                setTimeout(() => {
+                    messageDiv.classList.remove('show');
+                    setTimeout(() => {
+                        if (container.contains(messageDiv)) {
+                            container.removeChild(messageDiv);
+                        }
+                    }, 300);
+                }, 5000);
+            }
+        }
+
+        function clearMessages() {
+            document.getElementById('messageContainer').innerHTML = '';
+        }
+
+        // Form Validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validateForm(formType) {
+            let isValid = true;
+            const inputs = document.querySelectorAll(`#${formType}Form .form-input, #${formType}Form .form-select`);
+            
+            inputs.forEach(input => {
+                input.classList.remove('error', 'success');
+                
+                if (input.required && !input.value.trim()) {
+                    input.classList.add('error');
+                    isValid = false;
+                } else if (input.type === 'email' && input.value && !validateEmail(input.value)) {
+                    input.classList.add('error');
+                    isValid = false;
+                } else if (input.value) {
+                    input.classList.add('success');
+                }
+            });
+            
+            // Additional validation for signup
+            if (formType === 'signup') {
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const agreeTerms = document.getElementById('agreeTerms').checked;
+                
+                if (password !== confirmPassword) {
+                    document.getElementById('confirmPassword').classList.add('error');
+                    showMessage('Passwords do not match', 'error');
+                    isValid = false;
+                }
+                
+                if (password.length < 6) {
+                    document.getElementById('signupPassword').classList.add('error');
+                    showMessage('Password must be at least 6 characters long', 'error');
+                    isValid = false;
+                }
+                
+                if (!agreeTerms) {
+                    showMessage('Please agree to the Terms of Service and Privacy Policy', 'error');
+                    isValid = false;
+                }
+                
+                if (selectedRole === 'hr' && !document.getElementById('signupCompany').value.trim()) {
+                    document.getElementById('signupCompany').classList.add('error');
+                    showMessage('Company name is required for HR accounts', 'error');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
+
+        // Loading States
+        function setLoading(formType, loading) {
+            const form = document.getElementById(formType + 'Form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            if (loading) {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            } else {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Authentication Functions
+        function authenticateUser(credentials) {
+            // Simulate API call
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const demo = demoCredentials[selectedRole];
+                    if (credentials.email === demo.email && credentials.password === demo.password) {
+                        resolve({
+                            success: true,
+                            user: {
+                                email: credentials.email,
+                                name: selectedRole === 'hr' ? 'HR Manager' : 'John Doe',
+                                role: selectedRole,
+                                company: selectedRole === 'hr' ? 'Demo Company Inc.' : null
+                            }
+                        });
+                    } else {
+                        reject(new Error('Invalid credentials'));
+                    }
+                }, 2000);
+            });
+        }
+
+        function createUser(userData) {
+            // Simulate API call
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        success: true,
+                        user: {
+                            email: userData.email,
+                            name: userData.name,
+                            role: selectedRole,
+                            company: userData.company
+                        }
+                    });
+                }, 2500);
+            });
+        }
+
+        // Form Handlers
+        document.getElementById('signinForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm('signin')) return;
+            
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            
+            setLoading('signin', true);
+            clearMessages();
+            
+            try {
+                const result = await authenticateUser({ email, password });
+                
+                showMessage(`Welcome back! Redirecting to your ${selectedRole} dashboard...`, 'success');
+                
+                // Show success animation
+                document.getElementById('successCheckmark').classList.add('show');
+                
+                setTimeout(() => {
+                    // Redirect to appropriate dashboard
+                    if (selectedRole === 'hr') {
+                        window.location.href = 'hr-dashboard.html';
+                    } else {
+                        window.location.href = 'user.html'; // <-- now always user.html for candidates
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                showMessage(`Invalid credentials. Try: ${demoCredentials[selectedRole].email} / ${demoCredentials[selectedRole].password}`, 'error');
+            } finally {
+                setLoading('signin', false);
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm('signup')) return;
+            
+            const userData = {
+                name: document.getElementById('signupName').value,
+                email: document.getElementById('signupEmail').value,
+                company: document.getElementById('signupCompany').value,
+                position: document.getElementById('signupPosition').value,
+                experience: document.getElementById('signupExperience').value,
+                password: document.getElementById('signupPassword').value
+            };
+            
+            setLoading('signup', true);
+            clearMessages();
+            
+            try {
+                const result = await createUser(userData);
+                
+                showMessage('Account created successfully! Welcome to Jobsy AI Pro!', 'success');
+                
+                // Show success animation
+                document.getElementById('successCheckmark').classList.add('show');
+                
+                setTimeout(() => {
+                    // Redirect to appropriate dashboard
+                    if (selectedRole === 'hr') {
+                        window.location.href = 'hr-dashboard.html';
+                    } else {
+                        window.location.href = 'user.html'; // <-- now always user.html for candidates
+                    }
+                }, 2000);
+                
+            } catch (error) {
+                showMessage('Failed to create account. Please try again.', 'error');
+            } finally {
+                setLoading('signup', false);
+            }
+        });
+
+        // Social Authentication
+        function signInWithProvider(provider) {
+            showMessage(`Redirecting to ${provider.charAt(0).toUpperCase() + provider.slice(1)} authentication...`, 'info');
+            
+            setTimeout(() => {
+                showMessage(`${provider.charAt(0).toUpperCase() + provider.slice(1)} authentication successful!`, 'success');
+                
+                setTimeout(() => {
+                    if (selectedRole === 'hr') {
+                        window.location.href = 'hr-dashboard.html';
+                    } else {
+                        window.location.href = 'user.html'; // <-- now always user.html for candidates
+                    }
+                }, 1500);
+            }, 2000);
+        }
+
+        function signUpWithProvider(provider) {
+            signInWithProvider(provider);
+        }
+
+        // Additional Functions
+        function showForgotPassword() {
+            const email = prompt('Enter your email address to reset your password:');
+            if (email && validateEmail(email)) {
+                showMessage(`Password reset link sent to ${email}`, 'success');
+            } else if (email) {
+                showMessage('Please enter a valid email address', 'error');
+            }
+        }
+
+        function showTerms() {
+            showMessage('Terms of Service opened in new window', 'info');
+        }
+
+        function showPrivacy() {
+            showMessage('Privacy Policy opened in new window', 'info');
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password strength checker
+            document.getElementById('signupPassword').addEventListener('input', function() {
+                checkPasswordStrength(this.value);
+            });
+            
+            // Real-time validation
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value) {
+                        if (this.type === 'email' && !validateEmail(this.value)) {
+                            this.classList.add('error');
+                            this.classList.remove('success');
+                        } else {
+                            this.classList.add('success');
+                            this.classList.remove('error');
+                        }
+                    }
+                });
+                
+                input.addEventListener('input', function() {
+                    this.classList.remove('error', 'success');
+                });
+            });
+            
+            // Initialize with candidate role
+            selectRole('candidate', document.querySelector('.role-card[data-role="candidate"]'));
+            
+            // Show demo credentials hint
+            setTimeout(() => {
+                showMessage('Demo: Use candidate@demo.com/demo123 or hr@demo.com/demo123', 'info');
+            }, 1000);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter') {
+                    const activeForm = document.querySelector('.auth-form.active');
+                    if (activeForm) {
+                        activeForm.querySelector('button[type="submit"]').click();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

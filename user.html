@@ -1,0 +1,3176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced AI Hiring Platform - Jobsy Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .nav-tab.active,
+        .nav-tab:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Jobs Section */
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 250px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .job-company {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .job-type-badge {
+            background: #e9ecef;
+            color: #495057;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .job-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .job-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .job-description {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .job-requirements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .requirement-tag {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .applications-count {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a6fd8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-zoom {
+            background: #2D8CFF;
+            color: white;
+        }
+
+        .btn-google-meet {
+            background: #34A853;
+            color: white;
+        }
+
+        .btn-teams {
+            background: #6264A7;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        /* Advanced Video Meeting Styles */
+        .video-conference-room {
+            background: #000;
+            border-radius: 20px;
+            padding: 0;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 600px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-header {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .meeting-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .meeting-title-header {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .meeting-time {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .meeting-status-indicators {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .recording-indicator {
+            background: #dc3545;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .recording-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .participants-count {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .video-main-area {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 0;
+            position: relative;
+        }
+
+        .video-streams {
+            background: #1a1a1a;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .video-stream {
+            background: #2a2a2a;
+            border-radius: 12px;
+            position: relative;
+            min-height: 200px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .video-stream.speaking {
+            border-color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .video-stream.main-speaker {
+            grid-column: 1 / -1;
+            min-height: 400px;
+        }
+
+        .video-element {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .video-overlay .status-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-icon.muted {
+            background: #dc3545;
+        }
+
+        .status-icon.unmuted {
+            background: #28a745;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #dee2e6;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar-tab.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .sidebar-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #667eea;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .participant {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .participant:last-child {
+            border-bottom: none;
+        }
+
+        .participant-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .participant-avatar.speaking {
+            box-shadow: 0 0 0 3px #28a745;
+        }
+
+        .participant-info {
+            flex: 1;
+        }
+
+        .participant-name {
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .participant-role {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .participant-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .participant-control-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+            max-height: 300px;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.own {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.other {
+            background: #e9ecef;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-sender {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 3px;
+        }
+
+        .chat-text {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .chat-time {
+            font-size: 10px;
+            opacity: 0.6;
+            margin-top: 3px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .chat-send-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-controls {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .control-btn.mute {
+            background: #6c757d;
+        }
+
+        .control-btn.mute.active {
+            background: #dc3545;
+        }
+
+        .control-btn.video {
+            background: #28a745;
+        }
+
+        .control-btn.video.off {
+            background: #dc3545;
+        }
+
+        .control-btn.record {
+            background: #dc3545;
+        }
+
+        .control-btn.record.active {
+            animation: pulse 1s infinite;
+        }
+
+        .control-btn.share {
+            background: #17a2b8;
+        }
+
+        .control-btn.share.active {
+            background: #138496;
+        }
+
+        .control-btn.settings {
+            background: #6f42c1;
+        }
+
+        .control-btn.whiteboard {
+            background: #fd7e14;
+        }
+
+        .control-btn.reactions {
+            background: #e83e8c;
+        }
+
+        .advanced-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            padding: 10px;
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        .whiteboard-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+        }
+
+        .whiteboard-container.active {
+            display: flex;
+        }
+
+        .whiteboard-toolbar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .whiteboard-canvas {
+            flex: 1;
+            cursor: crosshair;
+        }
+
+        .reactions-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .reaction {
+            position: absolute;
+            font-size: 48px;
+            animation: reactionFloat 3s ease-out forwards;
+        }
+
+        @keyframes reactionFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+            50% {
+                transform: translateY(-100px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0.5);
+            }
+        }
+
+        .breakout-rooms {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .room-card {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .room-card:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .room-card.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .platform-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .platform-option {
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .platform-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .platform-option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .platform-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .platform-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Candidates Section */
+        .candidate-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .candidate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .candidate-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .match-score {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .candidate-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .skills-container {
+            margin-bottom: 15px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 2px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .nav-tabs {
+                justify-content: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .jobs-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                justify-content: center;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .job-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .candidate-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
+
+            .platform-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .video-main-area {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+                max-height: 300px;
+            }
+
+            .video-controls {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .notification {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification.error {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .notification.warning {
+            background: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+
+        /* AI Features */
+        .ai-assistant {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        .ai-chat {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .ai-chat.show {
+            display: flex;
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .ai-message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 12px;
+            max-width: 80%;
+        }
+
+        .ai-message.user {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .ai-message.assistant {
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        .ai-chat-input {
+            padding: 15px;
+            border-top: 1px solid #dee2e6;
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .ai-send {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">💼 Jobsy Pro</div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="showSection('jobs')">Jobs</button>
+                <button class="nav-tab" onclick="showSection('candidates')">Candidates</button>
+                <button class="nav-tab" onclick="showSection('meetings')">Video Meetings</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <h2 style="margin-bottom: 30px; color: #333; font-size: 28px;">AI-Powered Hiring Dashboard</h2>
+                
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCandidates">247</div>
+                        <div class="stat-label">Total Candidates</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="activeJobs">6</div>
+                        <div class="stat-label">Active Job Postings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="scheduledInterviews">18</div>
+                        <div class="stat-label">Scheduled Interviews</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avgMatchScore">87%</div>
+                        <div class="stat-label">Avg Match Score</div>
+                    </div>
+                </div>
+
+                <div style="background: white; border: 3px dashed #667eea; border-radius: 15px; padding: 40px; text-align: center; margin-bottom: 30px; cursor: pointer;" onclick="document.getElementById('fileUpload').click()">
+                    <div style="font-size: 48px; color: #667eea; margin-bottom: 15px;">📄</div>
+                    <h3>AI Resume Analysis & Job Matching</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Upload resumes for instant AI analysis and candidate matching</p>
+                    <input type="file" id="fileUpload" style="display: none;" multiple accept=".pdf,.doc,.docx" onchange="handleFileUpload(event)">
+                    <button class="btn btn-primary">Choose Files</button>
+                </div>
+
+                <div id="uploadNotification" class="notification">
+                    <strong>Success!</strong> Files uploaded and processed by AI successfully.
+                </div>
+            </section>
+
+            <!-- Jobs Section -->
+            <section id="jobs" class="section">
+                <div class="jobs-header">
+                    <h2 style="color: #333; font-size: 28px;">Available Jobs</h2>
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="Search jobs..." id="jobSearch" onkeyup="filterJobs()">
+                        <button class="btn btn-secondary">🔍 Filter</button>
+                    </div>
+                </div>
+
+                <div class="jobs-grid" id="jobsGrid">
+                    <!-- Jobs will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Candidates Section -->
+            <section id="candidates" class="section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 20px;">
+                    <h2 style="color: #333; font-size: 28px;">AI-Matched Candidates</h2>
+                    <button class="btn btn-primary" onclick="showModal('addCandidateModal')">➕ Add Candidate</button>
+                </div>
+
+                <div style="margin-bottom: 30px;">
+                    <input type="text" class="search-input" placeholder="Search candidates..." onkeyup="filterCandidates(this.value)">
+                </div>
+
+                <div id="candidatesList">
+                    <!-- Candidates will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Video Meetings Section -->
+            <section id="meetings" class="section">
+                <h2 style="margin-bottom: 30px; color: #333; font-size: 28px;">Advanced Video Meetings</h2>
+                
+                <!-- Integration Status -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px;">
+                    <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #28a745;"></div>
+                        <div><strong>WebRTC Integration:</strong> Connected</div>
+                    </div>
+                    <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #28a745;"></div>
+                        <div><strong>AI Features:</strong> Active</div>
+                    </div>
+                    <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px; display: flex; align-items: center; gap: 15px;">
+                        <div style="width: 12px; height: 12px; border-radius: 50%; background: #28a745;"></div>
+                        <div><strong>Recording:</strong> Available</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <button class="btn btn-success" onclick="startInstantMeeting()">
+                        🎥 Start Instant Meeting
+                    </button>
+                    <button class="btn btn-primary" onclick="showModal('scheduleMeetingModal')">
+                        📅 Schedule Meeting
+                    </button>
+                    <button class="btn btn-warning" onclick="createBreakoutRooms()">
+                        🏠 Create Breakout Rooms
+                    </button>
+                    <button class="btn btn-secondary" onclick="showModal('meetingSettingsModal')">
+                        ⚙️ Meeting Settings
+                    </button>
+                </div>
+
+                <!-- Breakout Rooms -->
+                <div id="breakoutRooms" class="breakout-rooms hidden">
+                    <h3>Breakout Rooms</h3>
+                    <div class="room-grid" id="roomGrid">
+                        <!-- Rooms will be populated -->
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <button class="btn btn-primary" onclick="addBreakoutRoom()">Add Room</button>
+                        <button class="btn btn-secondary" onclick="hideBreakoutRooms()">Close Rooms</button>
+                    </div>
+                </div>
+
+                <!-- Active Meetings -->
+                <div id="meetingsList">
+                    <!-- Meetings will be populated by JavaScript -->
+                </div>
+
+                <!-- Advanced Video Conference Room -->
+                <div id="videoRoom" class="video-conference-room hidden">
+                    <div class="video-header">
+                        <div class="meeting-info">
+                            <div class="meeting-title-header" id="meetingTitleHeader">Interview Meeting</div>
+                            <div class="meeting-time" id="meetingTimeHeader">Started at 10:30 AM</div>
+                        </div>
+                        <div class="meeting-status-indicators">
+                            <div class="recording-indicator" id="recordingIndicator">
+                                <div class="recording-dot"></div>
+                                Recording
+                            </div>
+                            <div class="participants-count" id="participantsCount">2 participants</div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-main-area">
+                        <div class="video-streams" id="videoStreams">
+                            <!-- Video streams will be populated -->
+                        </div>
+                        
+                        <div class="sidebar">
+                            <div class="sidebar-tabs">
+                                <button class="sidebar-tab active" onclick="showSidebarTab('participants')">👥 Participants</button>
+                                <button class="sidebar-tab" onclick="showSidebarTab('chat')">💬 Chat</button>
+                            </div>
+                            <div class="sidebar-content">
+                                <div id="participantsTab" class="sidebar-content-tab">
+                                    <div id="participantsList">
+                                        <!-- Participants will be populated -->
+                                    </div>
+                                </div>
+                                <div id="chatTab" class="sidebar-content-tab hidden">
+                                    <div class="chat-container">
+                                        <div class="chat-messages" id="chatMessages">
+                                            <!-- Chat messages will be populated -->
+                                        </div>
+                                        <div class="chat-input-container">
+                                            <input type="text" class="chat-input" id="chatInput" placeholder="Type a message..." onkeypress="handleChatKeyPress(event)">
+                                            <button class="chat-send-btn" onclick="sendChatMessage()">📤</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Whiteboard -->
+                    <div id="whiteboardContainer" class="whiteboard-container">
+                        <div class="whiteboard-toolbar">
+                            <button class="btn btn-secondary" onclick="selectTool('pen')">✏️ Pen</button>
+                            <button class="btn btn-secondary" onclick="selectTool('eraser')">🧽 Eraser</button>
+                            <button class="btn btn-secondary" onclick="clearWhiteboard()">🗑️ Clear</button>
+                            <button class="btn btn-secondary" onclick="closeWhiteboard()">❌ Close</button>
+                        </div>
+                        <canvas id="whiteboardCanvas" class="whiteboard-canvas"></canvas>
+                    </div>
+
+                    <!-- Reactions Overlay -->
+                    <div id="reactionsOverlay" class="reactions-overlay"></div>
+                    
+                    <div class="video-controls">
+                        <button class="control-btn mute" onclick="toggleMute()" id="muteBtn" title="Mute/Unmute">🎤</button>
+                        <button class="control-btn video" onclick="toggleVideo()" id="videoBtn" title="Camera On/Off">📹</button>
+                        <button class="control-btn record" onclick="toggleRecording()" id="recordBtn" title="Start/Stop Recording">⏺️</button>
+                        <div class="control-dropdown">
+                            <button class="control-btn share" onclick="toggleDropdown('shareDropdown')" title="Share Screen">🖥️</button>
+                            <div id="shareDropdown" class="dropdown-content">
+                                <div class="dropdown-item" onclick="shareScreen('screen')">🖥️ Share Screen</div>
+                                <div class="dropdown-item" onclick="shareScreen('window')">🪟 Share Window</div>
+                                <div class="dropdown-item" onclick="shareScreen('tab')">📑 Share Tab</div>
+                            </div>
+                        </div>
+                        <button class="control-btn whiteboard" onclick="toggleWhiteboard()" title="Whiteboard">📝</button>
+                        <div class="control-dropdown">
+                            <button class="control-btn reactions" onclick="toggleDropdown('reactionsDropdown')" title="Reactions">😊</button>
+                            <div id="reactionsDropdown" class="dropdown-content">
+                                <div class="dropdown-item" onclick="sendReaction('👍')">👍 Thumbs Up</div>
+                                <div class="dropdown-item" onclick="sendReaction('👏')">👏 Clap</div>
+                                <div class="dropdown-item" onclick="sendReaction('❤️')">❤️ Heart</div>
+                                <div class="dropdown-item" onclick="sendReaction('😂')">😂 Laugh</div>
+                                <div class="dropdown-item" onclick="sendReaction('😮')">😮 Wow</div>
+                            </div>
+                        </div>
+                        <div class="control-dropdown">
+                            <button class="control-btn settings" onclick="toggleDropdown('settingsDropdown')" title="Settings">⚙️</button>
+                            <div id="settingsDropdown" class="dropdown-content">
+                                <div class="dropdown-item" onclick="toggleVirtualBackground()">🖼️ Virtual Background</div>
+                                <div class="dropdown-item" onclick="toggleNoiseCancellation()">🔇 Noise Cancellation</div>
+                                <div class="dropdown-item" onclick="adjustVideoQuality()">📺 Video Quality</div>
+                                <div class="dropdown-item" onclick="showMeetingInfo()">ℹ️ Meeting Info</div>
+                            </div>
+                        </div>
+                        <div class="advanced-controls">
+                            <button class="btn btn-danger" onclick="endMeeting()">End Meeting</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- AI Assistant -->
+    <div class="ai-assistant" onclick="toggleAIChat()">🤖</div>
+    <div id="aiChat" class="ai-chat">
+        <div class="ai-chat-header">
+            <div>AI Assistant</div>
+            <button onclick="toggleAIChat()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">&times;</button>
+        </div>
+        <div class="ai-chat-messages" id="aiChatMessages">
+            <div class="ai-message assistant">
+                Hello! I'm your AI hiring assistant. I can help you with candidate matching, interview scheduling, and meeting insights. How can I assist you today?
+            </div>
+        </div>
+        <div class="ai-chat-input">
+            <input type="text" class="ai-input" id="aiInput" placeholder="Ask me anything..." onkeypress="handleAIKeyPress(event)">
+            <button class="ai-send" onclick="sendAIMessage()">📤</button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Job Details Modal -->
+    <div id="jobDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="jobModalTitle">Job Details</h3>
+                <button class="close-btn" onclick="hideModal('jobDetailsModal')">&times;</button>
+            </div>
+            <div id="jobModalContent">
+                <!-- Job details will be populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Application Modal -->
+    <div id="applyJobModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Apply for Job</h3>
+                <button class="close-btn" onclick="hideModal('applyJobModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" id="applyName" placeholder="Your name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="applyEmail" placeholder="you@email.com">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-input" id="applyPhone" placeholder="+1 (555) 123-4567">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Resume</label>
+                <input type="file" class="form-input" id="applyResume" accept=".pdf,.doc,.docx">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Cover Letter (optional)</label>
+                <textarea class="form-input form-textarea" id="applyCoverLetter" placeholder="Write a brief cover letter..."></textarea>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="hideModal('applyJobModal')">Cancel</button>
+                <button class="btn btn-success" onclick="submitJobApplication()">Submit Application</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Candidate Modal -->
+    <div id="addCandidateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Candidate</h3>
+                <button class="close-btn" onclick="hideModal('addCandidateModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" id="candidateName">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-input" id="candidateEmail">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-input" id="candidatePhone">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Position Applied</label>
+                <input type="text" class="form-input" id="candidatePosition">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Skills (comma separated)</label>
+                <input type="text" class="form-input" id="candidateSkills">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="hideModal('addCandidateModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="addCandidate()">Add Candidate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Meeting Modal -->
+    <div id="scheduleMeetingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Schedule Advanced Video Meeting</h3>
+                <button class="close-btn" onclick="hideModal('scheduleMeetingModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Meeting Title</label>
+                <input type="text" class="form-input" id="meetingTitle" placeholder="Interview with candidate">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Date & Time</label>
+                <input type="datetime-local" class="form-input" id="meetingDateTime">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Duration (minutes)</label>
+                <select class="form-input" id="meetingDuration">
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">1 hour</option>
+                    <option value="90">1.5 hours</option>
+                    <option value="120">2 hours</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Participants (email addresses)</label>
+                <textarea class="form-input" id="meetingParticipants" placeholder="candidate@email.com, interviewer@company.com"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Meeting Features</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="enableRecording" checked>
+                        <span>Enable Recording</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="enableWhiteboard" checked>
+                        <span>Enable Whiteboard</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="enableBreakout">
+                        <span>Breakout Rooms</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="enableAI" checked>
+                        <span>AI Assistant</span>
+                    </label>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="hideModal('scheduleMeetingModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createScheduledMeeting()">Schedule Meeting</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meeting Settings Modal -->
+    <div id="meetingSettingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Meeting Settings</h3>
+                <button class="close-btn" onclick="hideModal('meetingSettingsModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Video Quality</label>
+                <select class="form-input" id="videoQuality">
+                    <option value="low">Low (360p)</option>
+                    <option value="medium" selected>Medium (720p)</option>
+                    <option value="high">High (1080p)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Audio Settings</label>
+                <div style="display: grid; gap: 10px;">
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="noiseCancellation" checked>
+                        <span>Noise Cancellation</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="echoCancellation" checked>
+                        <span>Echo Cancellation</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Virtual Background</label>
+                <select class="form-input" id="virtualBackground">
+                    <option value="none">None</option>
+                    <option value="blur">Blur Background</option>
+                    <option value="office">Office</option>
+                    <option value="nature">Nature</option>
+                    <option value="abstract">Abstract</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button class="btn btn-secondary" onclick="hideModal('meetingSettingsModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="applyMeetingSettings()">Apply Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let localStream = null;
+        let remoteStream = null;
+        let peerConnection = null;
+        let currentMeeting = null;
+        let isRecording = false;
+        let isMuted = false;
+        let isVideoOn = true;
+        let selectedJobId = null;
+        let isScreenSharing = false;
+        let whiteboardCanvas = null;
+        let whiteboardCtx = null;
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let chatMessages = [];
+        let participants = [];
+        let breakoutRooms = [];
+        let virtualBackgroundEnabled = false;
+        let noiseCancellationEnabled = true;
+
+        // WebRTC Configuration
+        const rtcConfiguration = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' }
+            ]
+        };
+
+        // Sample data
+        const jobs = [
+            {
+                id: 1,
+                title: "Senior Software Engineer",
+                company: "TechCorp Inc.",
+                location: "San Francisco, CA",
+                type: "Full-time",
+                salary: "$120,000 - $180,000",
+                description: "We are looking for a Senior Software Engineer to join our growing team. You will be responsible for designing, developing, and maintaining scalable web applications using modern technologies.",
+                requirements: ["5+ years of experience", "JavaScript/TypeScript", "React/Vue.js", "Node.js", "AWS/GCP"],
+                benefits: ["Health Insurance", "401k Matching", "Remote Work", "Unlimited PTO"],
+                postedDate: "2024-01-10",
+                applications: 45
+            },
+            {
+                id: 2,
+                title: "Data Scientist",
+                company: "DataFlow Analytics",
+                location: "New York, NY",
+                type: "Full-time",
+                salary: "$100,000 - $150,000",
+                description: "Join our data science team to build machine learning models and extract insights from large datasets. Work with cutting-edge AI technologies.",
+                requirements: ["3+ years experience", "Python/R", "Machine Learning", "SQL", "Statistics"],
+                benefits: ["Health Insurance", "Stock Options", "Learning Budget", "Flexible Hours"],
+                postedDate: "2024-01-12",
+                applications: 32
+            },
+            {
+                id: 3,
+                title: "UX Designer",
+                company: "Design Studio Pro",
+                location: "Austin, TX",
+                type: "Full-time",
+                salary: "$80,000 - $120,000",
+                description: "Create intuitive and beautiful user experiences for our digital products. Work closely with product and engineering teams to deliver exceptional designs.",
+                requirements: ["3+ years experience", "Figma/Sketch", "User Research", "Prototyping", "Design Systems"],
+                benefits: ["Health Insurance", "Creative Budget", "Remote Work", "Professional Development"],
+                postedDate: "2024-01-08",
+                applications: 28
+            },
+            {
+                id: 4,
+                title: "DevOps Engineer",
+                company: "CloudTech Solutions",
+                location: "Seattle, WA",
+                type: "Full-time",
+                salary: "$110,000 - $160,000",
+                description: "Build and maintain our cloud infrastructure. Implement CI/CD pipelines and ensure system reliability and scalability.",
+                requirements: ["4+ years experience", "Docker/Kubernetes", "AWS/Azure", "Jenkins/GitLab CI", "Terraform"],
+                benefits: ["Health Insurance", "Stock Options", "Remote Work", "Conference Budget"],
+                postedDate: "2024-01-15",
+                applications: 38
+            },
+            {
+                id: 5,
+                title: "Product Manager",
+                company: "Innovation Labs",
+                location: "Boston, MA",
+                type: "Full-time",
+                salary: "$130,000 - $170,000",
+                description: "Lead product strategy and roadmap for our flagship products. Work with cross-functional teams to deliver exceptional user experiences.",
+                requirements: ["5+ years experience", "Product Strategy", "Agile/Scrum", "Data Analysis", "User Research"],
+                benefits: ["Health Insurance", "Equity Package", "Flexible PTO", "Learning Stipend"],
+                postedDate: "2024-01-14",
+                applications: 52
+            },
+            {
+                id: 6,
+                title: "Frontend Developer",
+                company: "WebCraft Agency",
+                location: "Remote",
+                type: "Contract",
+                salary: "$60 - $80/hour",
+                description: "Develop responsive and interactive web applications using modern frontend technologies. Work with a distributed team on exciting projects.",
+                requirements: ["2+ years experience", "React/Angular/Vue", "HTML/CSS/JavaScript", "Responsive Design", "Git"],
+                benefits: ["Flexible Schedule", "Remote Work", "Project Bonuses", "Skill Development"],
+                postedDate: "2024-01-16",
+                applications: 67
+            }
+        ];
+
+        const candidates = [
+            {
+                id: 1,
+                name: "Sarah Johnson",
+                email: "sarah.johnson@email.com",
+                phone: "+1 (555) 123-4567",
+                position: "Senior Software Engineer",
+                experience: "5 years",
+                skills: ["JavaScript", "React", "Node.js", "Python", "AWS"],
+                matchScore: 94,
+                status: "Interview Scheduled",
+                location: "San Francisco, CA"
+            },
+            {
+                id: 2,
+                name: "Michael Chen",
+                email: "michael.chen@email.com",
+                phone: "+1 (555) 234-5678",
+                position: "Data Scientist",
+                experience: "3 years",
+                skills: ["Python", "Machine Learning", "TensorFlow", "SQL", "R"],
+                matchScore: 89,
+                status: "Under Review",
+                location: "New York, NY"
+            },
+            {
+                id: 3,
+                name: "Emily Rodriguez",
+                email: "emily.rodriguez@email.com",
+                phone: "+1 (555) 345-6789",
+                position: "UX Designer",
+                experience: "4 years",
+                skills: ["Figma", "Adobe XD", "User Research", "Prototyping", "HTML/CSS"],
+                matchScore: 91,
+                status: "Phone Screen",
+                location: "Austin, TX"
+            }
+        ];
+
+        let meetings = [
+            {
+                id: 1,
+                title: "Interview with Sarah Johnson",
+                date: "2024-01-20",
+                time: "10:00 AM",
+                duration: 60,
+                status: "scheduled",
+                participants: ["sarah.johnson@email.com", "interviewer@company.com"],
+                features: {
+                    recording: true,
+                    whiteboard: true,
+                    breakout: false,
+                    ai: true
+                }
+            },
+            {
+                id: 2,
+                title: "Technical Interview - Michael Chen",
+                date: "2024-01-21",
+                time: "2:00 PM",
+                duration: 45,
+                status: "scheduled",
+                participants: ["michael.chen@email.com", "tech-lead@company.com"],
+                features: {
+                    recording: true,
+                    whiteboard: true,
+                    breakout: false,
+                    ai: true
+                }
+            }
+        ];
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (sectionId === 'jobs') {
+                loadJobs();
+            } else if (sectionId === 'candidates') {
+                loadCandidates();
+            } else if (sectionId === 'meetings') {
+                loadMeetings();
+            }
+        }
+
+        // Jobs functionality
+        function loadJobs() {
+            const jobsGrid = document.getElementById('jobsGrid');
+            jobsGrid.innerHTML = '';
+            
+            jobs.forEach(job => {
+                const jobCard = createJobCard(job);
+                jobsGrid.appendChild(jobCard);
+            });
+        }
+
+        function createJobCard(job) {
+            const card = document.createElement('div');
+            card.className = 'job-card fade-in';
+            
+            card.innerHTML = `
+                <div class="job-header">
+                    <div>
+                        <div class="job-title">${job.title}</div>
+                        <div class="job-company">${job.company}</div>
+                    </div>
+                    <div class="job-type-badge">${job.type}</div>
+                </div>
+                <div class="job-details">
+                    <div class="job-detail-item">
+                        <span>📍</span>
+                        <span>${job.location}</span>
+                    </div>
+                    <div class="job-detail-item">
+                        <span>💰</span>
+                        <span>${job.salary}</span>
+                    </div>
+                </div>
+                <div class="job-description">${job.description}</div>
+                <div class="job-requirements">
+                    ${job.requirements.slice(0, 3).map(req => `<span class="requirement-tag">${req}</span>`).join('')}
+                    ${job.requirements.length > 3 ? `<span class="requirement-tag">+${job.requirements.length - 3} more</span>` : ''}
+                </div>
+                <div class="job-footer">
+                    <span class="applications-count">${job.applications} applications</span>
+                    <div class="job-actions">
+                        <button class="btn btn-secondary" onclick="showJobDetails(${job.id})">View Details</button>
+                        <button class="btn btn-primary" onclick="applyForJob(${job.id})">Apply Now</button>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function filterJobs() {
+            const searchTerm = document.getElementById('jobSearch').value.toLowerCase();
+            const filteredJobs = jobs.filter(job => 
+                job.title.toLowerCase().includes(searchTerm) ||
+                job.company.toLowerCase().includes(searchTerm) ||
+                job.location.toLowerCase().includes(searchTerm)
+            );
+            
+            const jobsGrid = document.getElementById('jobsGrid');
+            jobsGrid.innerHTML = '';
+            
+            filteredJobs.forEach(job => {
+                const jobCard = createJobCard(job);
+                jobsGrid.appendChild(jobCard);
+            });
+        }
+
+        function showJobDetails(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+            
+            document.getElementById('jobModalTitle').textContent = job.title;
+            document.getElementById('jobModalContent').innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #667eea; margin-bottom: 10px;">${job.company}</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                        <div class="job-detail-item">
+                            <span>📍</span>
+                            <span>${job.location}</span>
+                        </div>
+                        <div class="job-detail-item">
+                            <span>💰</span>
+                            <span>${job.salary}</span>
+                        </div>
+                        <div class="job-detail-item">
+                            <span>⏰</span>
+                            <span>${job.type}</span>
+                        </div>
+                        <div class="job-detail-item">
+                            <span>👥</span>
+                            <span>${job.applications} applications</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px;">Job Description</h4>
+                    <p style="color: #666; line-height: 1.6;">${job.description}</p>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px;">Requirements</h4>
+                    <ul style="margin-left: 20px; color: #666;">
+                        ${job.requirements.map(req => `<li style="margin-bottom: 5px;">${req}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div style="margin-bottom: 30px;">
+                    <h4 style="margin-bottom: 10px;">Benefits</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        ${job.benefits.map(benefit => `<span class="requirement-tag">${benefit}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="hideModal('jobDetailsModal')">Close</button>
+                    <button class="btn btn-primary" onclick="applyForJob(${job.id})">Apply for this Job</button>
+                </div>
+            `;
+            
+            showModal('jobDetailsModal');
+        }
+
+        function applyForJob(jobId) {
+            selectedJobId = jobId;
+            hideModal('jobDetailsModal');
+            showModal('applyJobModal');
+        }
+
+        function submitJobApplication() {
+            const name = document.getElementById('applyName').value;
+            const email = document.getElementById('applyEmail').value;
+            const phone = document.getElementById('applyPhone').value;
+            const resume = document.getElementById('applyResume').files[0];
+            
+            if (!name || !email || !phone || !resume) {
+                showNotification('Please fill in all required fields and upload your resume.', 'error');
+                return;
+            }
+            
+            const job = jobs.find(j => j.id === selectedJobId);
+            if (job) {
+                job.applications++;
+                loadJobs();
+            }
+            
+            hideModal('applyJobModal');
+            showNotification('Application submitted successfully! Our AI will analyze your resume and match you with the best opportunities.', 'success');
+            
+            // Clear form
+            document.getElementById('applyName').value = '';
+            document.getElementById('applyEmail').value = '';
+            document.getElementById('applyPhone').value = '';
+            document.getElementById('applyResume').value = '';
+            document.getElementById('applyCoverLetter').value = '';
+        }
+
+        // Candidates functionality
+        function loadCandidates() {
+            const candidatesList = document.getElementById('candidatesList');
+            candidatesList.innerHTML = '';
+            
+            candidates.forEach(candidate => {
+                const candidateCard = createCandidateCard(candidate);
+                candidatesList.appendChild(candidateCard);
+            });
+        }
+
+        function createCandidateCard(candidate) {
+            const card = document.createElement('div');
+            card.className = 'candidate-card fade-in';
+            
+            card.innerHTML = `
+                <div class="candidate-header">
+                    <div class="candidate-name">${candidate.name}</div>
+                    <div class="match-score">${candidate.matchScore}% AI Match</div>
+                </div>
+                <div class="candidate-details">
+                    <div class="detail-item">
+                        <span>📧</span>
+                        <span>${candidate.email}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>📱</span>
+                        <span>${candidate.phone}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>💼</span>
+                        <span>${candidate.position}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>📍</span>
+                        <span>${candidate.location}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>⏱️</span>
+                        <span>${candidate.experience} experience</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>📊</span>
+                        <span>Status: ${candidate.status}</span>
+                    </div>
+                </div>
+                <div class="skills-container">
+                    <strong>Skills:</strong>
+                    ${candidate.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="scheduleInterviewForCandidate(${candidate.id})">Schedule Interview</button>
+                    <button class="btn btn-secondary" onclick="sendMessage(${candidate.id})">Send Message</button>
+                    <button class="btn btn-secondary" onclick="viewProfile(${candidate.id})">View Profile</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function filterCandidates(searchTerm) {
+            const filteredCandidates = candidates.filter(candidate => 
+                candidate.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                candidate.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                candidate.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
+            );
+            
+            const candidatesList = document.getElementById('candidatesList');
+            candidatesList.innerHTML = '';
+            
+            filteredCandidates.forEach(candidate => {
+                const candidateCard = createCandidateCard(candidate);
+                candidatesList.appendChild(candidateCard);
+            });
+        }
+
+        function addCandidate() {
+            const name = document.getElementById('candidateName').value;
+            const email = document.getElementById('candidateEmail').value;
+            const phone = document.getElementById('candidatePhone').value;
+            const position = document.getElementById('candidatePosition').value;
+            const skills = document.getElementById('candidateSkills').value.split(',').map(s => s.trim());
+            
+            if (!name || !email || !position) {
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            const newCandidate = {
+                id: candidates.length + 1,
+                name,
+                email,
+                phone,
+                position,
+                experience: "New",
+                skills,
+                matchScore: Math.floor(Math.random() * 20) + 80,
+                status: "New Application",
+                location: "Remote"
+            };
+            
+            candidates.push(newCandidate);
+            hideModal('addCandidateModal');
+            loadCandidates();
+            
+            document.getElementById('totalCandidates').textContent = candidates.length;
+            
+            // Clear form
+            document.getElementById('candidateName').value = '';
+            document.getElementById('candidateEmail').value = '';
+            document.getElementById('candidatePhone').value = '';
+            document.getElementById('candidatePosition').value = '';
+            document.getElementById('candidateSkills').value = '';
+            
+            showNotification('Candidate added successfully! AI analysis completed.', 'success');
+        }
+
+        function scheduleInterviewForCandidate(candidateId) {
+            const candidate = candidates.find(c => c.id === candidateId);
+            document.getElementById('meetingTitle').value = `Interview with ${candidate.name}`;
+            document.getElementById('meetingParticipants').value = `${candidate.email}, interviewer@company.com`;
+            showModal('scheduleMeetingModal');
+        }
+
+        function sendMessage(candidateId) {
+            const candidate = candidates.find(c => c.id === candidateId);
+            showNotification(`Message sent to ${candidate.name}`, 'success');
+        }
+
+        function viewProfile(candidateId) {
+            const candidate = candidates.find(c => c.id === candidateId);
+            showNotification(`Viewing detailed profile for ${candidate.name}`, 'success');
+        }
+
+        // Advanced Video Meeting Functions
+        async function startInstantMeeting() {
+            try {
+                await initializeVideoCall();
+                
+                const newMeeting = {
+                    id: meetings.length + 1,
+                    title: "Instant Interview Meeting",
+                    date: new Date().toISOString().split('T')[0],
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                    duration: 60,
+                    status: "live",
+                    participants: ["interviewer@company.com"],
+                    features: {
+                        recording: true,
+                        whiteboard: true,
+                        breakout: false,
+                        ai: true
+                    }
+                };
+                
+                meetings.push(newMeeting);
+                currentMeeting = newMeeting;
+                
+                showVideoRoom();
+                loadMeetings();
+                
+                showNotification('Instant meeting started! Waiting for participants to join.', 'success');
+            } catch (error) {
+                console.error('Error starting meeting:', error);
+                showNotification('Error starting meeting. Please check your camera and microphone permissions.', 'error');
+            }
+        }
+
+        async function initializeVideoCall() {
+            try {
+                // Get user media
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    },
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: noiseCancellationEnabled,
+                        autoGainControl: true
+                    }
+                });
+
+                // Create peer connection
+                peerConnection = new RTCPeerConnection(rtcConfiguration);
+                
+                // Add local stream to peer connection
+                localStream.getTracks().forEach(track => {
+                    peerConnection.addTrack(track, localStream);
+                });
+
+                // Handle remote stream
+                peerConnection.ontrack = (event) => {
+                    remoteStream = event.streams[0];
+                    displayRemoteVideo();
+                };
+
+                // Handle ICE candidates
+                peerConnection.onicecandidate = (event) => {
+                    if (event.candidate) {
+                        // In a real application, send this to the remote peer
+                        console.log('ICE candidate:', event.candidate);
+                    }
+                };
+
+                return true;
+            } catch (error) {
+                console.error('Error accessing media devices:', error);
+                throw error;
+            }
+        }
+
+        function showVideoRoom() {
+            document.getElementById('videoRoom').classList.remove('hidden');
+            document.getElementById('meetingTitleHeader').textContent = currentMeeting.title;
+            document.getElementById('meetingTimeHeader').textContent = `Started at ${currentMeeting.time}`;
+            
+            // Display local video
+            displayLocalVideo();
+            
+            // Initialize participants
+            loadParticipants();
+            
+            // Initialize whiteboard
+            initializeWhiteboard();
+            
+            // Scroll to video room
+            document.getElementById('videoRoom').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayLocalVideo() {
+            const videoStreams = document.getElementById('videoStreams');
+            videoStreams.innerHTML = '';
+            
+            // Create local video element
+            const localVideoContainer = document.createElement('div');
+            localVideoContainer.className = 'video-stream main-speaker';
+            localVideoContainer.innerHTML = `
+                <video class="video-element" autoplay muted playsinline></video>
+                <div class="video-overlay">
+                    <div class="status-icon ${isMuted ? 'muted' : 'unmuted'}"></div>
+                    You (Host)
+                </div>
+            `;
+            
+            const localVideo = localVideoContainer.querySelector('video');
+            localVideo.srcObject = localStream;
+            
+            videoStreams.appendChild(localVideoContainer);
+            
+            // Simulate remote participants joining
+            setTimeout(() => {
+                addSimulatedParticipant('Sarah Johnson', 'sarah.johnson@email.com');
+            }, 3000);
+        }
+
+        function displayRemoteVideo() {
+            const videoStreams = document.getElementById('videoStreams');
+            
+            const remoteVideoContainer = document.createElement('div');
+            remoteVideoContainer.className = 'video-stream';
+            remoteVideoContainer.innerHTML = `
+                <video class="video-element" autoplay playsinline></video>
+                <div class="video-overlay">
+                    <div class="status-icon unmuted"></div>
+                    Remote Participant
+                </div>
+            `;
+            
+            const remoteVideo = remoteVideoContainer.querySelector('video');
+            remoteVideo.srcObject = remoteStream;
+            
+            videoStreams.appendChild(remoteVideoContainer);
+        }
+
+        function addSimulatedParticipant(name, email) {
+            const videoStreams = document.getElementById('videoStreams');
+            
+            const participantContainer = document.createElement('div');
+            participantContainer.className = 'video-stream';
+            participantContainer.innerHTML = `
+                <div class="video-element" style="background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                    ${name.split(' ').map(n => n[0]).join('')}
+                </div>
+                <div class="video-overlay">
+                    <div class="status-icon unmuted"></div>
+                    ${name}
+                </div>
+            `;
+            
+            videoStreams.appendChild(participantContainer);
+            
+            // Add to participants list
+            participants.push({
+                id: participants.length + 1,
+                name: name,
+                email: email,
+                role: 'Candidate',
+                muted: false,
+                videoOn: true,
+                speaking: false
+            });
+            
+            loadParticipants();
+            updateParticipantsCount();
+            
+            showNotification(`${name} joined the meeting`, 'success');
+        }
+
+        function loadParticipants() {
+            const participantsList = document.getElementById('participantsList');
+            participantsList.innerHTML = '';
+            
+            // Add current user
+            const currentUser = document.createElement('div');
+            currentUser.className = 'participant';
+            currentUser.innerHTML = `
+                <div class="participant-avatar ${Math.random() > 0.7 ? 'speaking' : ''}">ME</div>
+                <div class="participant-info">
+                    <div class="participant-name">You (Host)</div>
+                    <div class="participant-role">Interviewer</div>
+                </div>
+                <div class="participant-controls">
+                    <button class="participant-control-btn" style="background: ${isMuted ? '#dc3545' : '#28a745'}; color: white;" title="${isMuted ? 'Unmute' : 'Mute'}">
+                        ${isMuted ? '🔇' : '🎤'}
+                    </button>
+                    <button class="participant-control-btn" style="background: ${isVideoOn ? '#28a745' : '#dc3545'}; color: white;" title="${isVideoOn ? 'Turn off camera' : 'Turn on camera'}">
+                        ${isVideoOn ? '📹' : '📷'}
+                    </button>
+                </div>
+            `;
+            participantsList.appendChild(currentUser);
+            
+            // Add other participants
+            participants.forEach(participant => {
+                const participantElement = document.createElement('div');
+                participantElement.className = 'participant';
+                const initials = participant.name.split(' ').map(n => n[0]).join('');
+                
+                participantElement.innerHTML = `
+                    <div class="participant-avatar ${participant.speaking ? 'speaking' : ''}">${initials}</div>
+                    <div class="participant-info">
+                        <div class="participant-name">${participant.name}</div>
+                        <div class="participant-role">${participant.role}</div>
+                    </div>
+                    <div class="participant-controls">
+                        <button class="participant-control-btn" style="background: ${participant.muted ? '#dc3545' : '#28a745'}; color: white;" onclick="toggleParticipantMute(${participant.id})">
+                            ${participant.muted ? '🔇' : '🎤'}
+                        </button>
+                        <button class="participant-control-btn" style="background: #17a2b8; color: white;" onclick="sendPrivateMessage(${participant.id})" title="Send private message">
+                            💬
+                        </button>
+                    </div>
+                `;
+                participantsList.appendChild(participantElement);
+            });
+        }
+
+        function updateParticipantsCount() {
+            const count = participants.length + 1; // +1 for current user
+            document.getElementById('participantsCount').textContent = `${count} participants`;
+        }
+
+        function toggleParticipantMute(participantId) {
+            const participant = participants.find(p => p.id === participantId);
+            if (participant) {
+                participant.muted = !participant.muted;
+                loadParticipants();
+                showNotification(`${participant.name} ${participant.muted ? 'muted' : 'unmuted'}`, 'success');
+            }
+        }
+
+        function sendPrivateMessage(participantId) {
+            const participant = participants.find(p => p.id === participantId);
+            if (participant) {
+                showNotification(`Private message sent to ${participant.name}`, 'success');
+            }
+        }
+
+        // Video Controls
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('muteBtn');
+            btn.textContent = isMuted ? '🔇' : '🎤';
+            btn.className = isMuted ? 'control-btn mute active' : 'control-btn mute';
+            
+            if (localStream) {
+                localStream.getAudioTracks().forEach(track => {
+                    track.enabled = !isMuted;
+                });
+            }
+            
+            loadParticipants();
+            showNotification(isMuted ? 'Microphone muted' : 'Microphone unmuted', 'success');
+        }
+
+        function toggleVideo() {
+            isVideoOn = !isVideoOn;
+            const btn = document.getElementById('videoBtn');
+            btn.textContent = isVideoOn ? '📹' : '📷';
+            btn.className = isVideoOn ? 'control-btn video' : 'control-btn video off';
+            
+            if (localStream) {
+                localStream.getVideoTracks().forEach(track => {
+                    track.enabled = isVideoOn;
+                });
+            }
+            
+            loadParticipants();
+            showNotification(isVideoOn ? 'Camera turned on' : 'Camera turned off', 'success');
+        }
+
+        function toggleRecording() {
+            isRecording = !isRecording;
+            const indicator = document.getElementById('recordingIndicator');
+            const btn = document.getElementById('recordBtn');
+            
+            if (isRecording) {
+                indicator.style.display = 'flex';
+                btn.classList.add('active');
+                if (currentMeeting) {
+                    currentMeeting.recording = true;
+                }
+                showNotification('Recording started', 'success');
+            } else {
+                indicator.style.display = 'none';
+                btn.classList.remove('active');
+                if (currentMeeting) {
+                    currentMeeting.recording = false;
+                }
+                showNotification('Recording stopped and saved', 'success');
+            }
+        }
+
+        async function shareScreen(type = 'screen') {
+            try {
+                if (isScreenSharing) {
+                    // Stop screen sharing
+                    const videoTrack = localStream.getVideoTracks()[0];
+                    const newStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                    const newVideoTrack = newStream.getVideoTracks()[0];
+                    
+                    if (peerConnection) {
+                        const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                        if (sender) {
+                            await sender.replaceTrack(newVideoTrack);
+                        }
+                    }
+                    
+                    videoTrack.stop();
+                    localStream.removeTrack(videoTrack);
+                    localStream.addTrack(newVideoTrack);
+                    
+                    isScreenSharing = false;
+                    showNotification('Screen sharing stopped', 'success');
+                } else {
+                    // Start screen sharing
+                    const displayMediaOptions = {
+                        video: true,
+                        audio: true
+                    };
+                    
+                    if (type === 'window') {
+                        displayMediaOptions.video = { mediaSource: 'window' };
+                    } else if (type === 'tab') {
+                        displayMediaOptions.video = { mediaSource: 'browser' };
+                    }
+                    
+                    const screenStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                    const screenTrack = screenStream.getVideoTracks()[0];
+                    
+                    if (peerConnection) {
+                        const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                        if (sender) {
+                            await sender.replaceTrack(screenTrack);
+                        }
+                    }
+                    
+                    const videoTrack = localStream.getVideoTracks()[0];
+                    localStream.removeTrack(videoTrack);
+                    localStream.addTrack(screenTrack);
+                    
+                    screenTrack.onended = () => {
+                        shareScreen(); // Stop sharing when user stops
+                    };
+                    
+                    isScreenSharing = true;
+                    showNotification(`Screen sharing started (${type})`, 'success');
+                }
+            } catch (error) {
+                console.error('Error sharing screen:', error);
+                showNotification('Error starting screen share', 'error');
+            }
+        }
+
+        // Whiteboard Functions
+        function initializeWhiteboard() {
+            whiteboardCanvas = document.getElementById('whiteboardCanvas');
+            whiteboardCtx = whiteboardCanvas.getContext('2d');
+            
+            // Set canvas size
+            whiteboardCanvas.width = whiteboardCanvas.offsetWidth;
+            whiteboardCanvas.height = whiteboardCanvas.offsetHeight;
+            
+            // Set drawing properties
+            whiteboardCtx.lineCap = 'round';
+            whiteboardCtx.lineJoin = 'round';
+            whiteboardCtx.lineWidth = 3;
+            whiteboardCtx.strokeStyle = '#000000';
+            
+            // Add event listeners
+            whiteboardCanvas.addEventListener('mousedown', startDrawing);
+            whiteboardCanvas.addEventListener('mousemove', draw);
+            whiteboardCanvas.addEventListener('mouseup', stopDrawing);
+            whiteboardCanvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events for mobile
+            whiteboardCanvas.addEventListener('touchstart', handleTouch);
+            whiteboardCanvas.addEventListener('touchmove', handleTouch);
+            whiteboardCanvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function toggleWhiteboard() {
+            const container = document.getElementById('whiteboardContainer');
+            container.classList.toggle('active');
+            
+            if (container.classList.contains('active')) {
+                showNotification('Whiteboard opened', 'success');
+            } else {
+                showNotification('Whiteboard closed', 'success');
+            }
+        }
+
+        function selectTool(tool) {
+            currentTool = tool;
+            if (tool === 'eraser') {
+                whiteboardCtx.globalCompositeOperation = 'destination-out';
+                whiteboardCtx.lineWidth = 10;
+            } else {
+                whiteboardCtx.globalCompositeOperation = 'source-over';
+                whiteboardCtx.lineWidth = 3;
+            }
+            showNotification(`${tool} selected`, 'success');
+        }
+
+        function clearWhiteboard() {
+            whiteboardCtx.clearRect(0, 0, whiteboardCanvas.width, whiteboardCanvas.height);
+            showNotification('Whiteboard cleared', 'success');
+        }
+
+        function closeWhiteboard() {
+            document.getElementById('whiteboardContainer').classList.remove('active');
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = whiteboardCanvas.getBoundingClientRect();
+            whiteboardCtx.beginPath();
+            whiteboardCtx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = whiteboardCanvas.getBoundingClientRect();
+            whiteboardCtx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            whiteboardCtx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            whiteboardCanvas.dispatchEvent(mouseEvent);
+        }
+
+        // Chat Functions
+        function showSidebarTab(tabName) {
+            document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.sidebar-content-tab').forEach(content => content.classList.add('hidden'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const chatMessage = {
+                    id: chatMessages.length + 1,
+                    sender: 'You',
+                    text: message,
+                    time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                    own: true
+                };
+                
+                chatMessages.push(chatMessage);
+                displayChatMessage(chatMessage);
+                input.value = '';
+                
+                // Simulate response from participant
+                setTimeout(() => {
+                    const response = {
+                        id: chatMessages.length + 1,
+                        sender: 'Sarah Johnson',
+                        text: getRandomResponse(),
+                        time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                        own: false
+                    };
+                    chatMessages.push(response);
+                    displayChatMessage(response);
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        function displayChatMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `chat-message ${message.own ? 'own' : 'other'}`;
+            
+            messageElement.innerHTML = `
+                <div class="chat-sender">${message.sender}</div>
+                <div class="chat-text">${message.text}</div>
+                <div class="chat-time">${message.time}</div>
+            `;
+            
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        function getRandomResponse() {
+            const responses = [
+                "Thank you for that question!",
+                "That's a great point.",
+                "I understand. Let me think about that.",
+                "Could you elaborate on that?",
+                "That makes sense.",
+                "I appreciate the opportunity to discuss this.",
+                "That's an interesting perspective.",
+                "I agree with that approach."
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Reactions
+        function sendReaction(emoji) {
+            const overlay = document.getElementById('reactionsOverlay');
+            const reaction = document.createElement('div');
+            reaction.className = 'reaction';
+            reaction.textContent = emoji;
+            reaction.style.left = Math.random() * 200 - 100 + 'px';
+            reaction.style.top = Math.random() * 200 - 100 + 'px';
+            
+            overlay.appendChild(reaction);
+            
+            setTimeout(() => {
+                overlay.removeChild(reaction);
+            }, 3000);
+            
+            showNotification(`Reaction sent: ${emoji}`, 'success');
+        }
+
+        // Breakout Rooms
+        function createBreakoutRooms() {
+            breakoutRooms = [
+                { id: 1, name: 'Technical Discussion', participants: [] },
+                { id: 2, name: 'Cultural Fit', participants: [] },
+                { id: 3, name: 'Q&A Session', participants: [] }
+            ];
+            
+            document.getElementById('breakoutRooms').classList.remove('hidden');
+            loadBreakoutRooms();
+            showNotification('Breakout rooms created', 'success');
+        }
+
+        function loadBreakoutRooms() {
+            const roomGrid = document.getElementById('roomGrid');
+            roomGrid.innerHTML = '';
+            
+            breakoutRooms.forEach(room => {
+                const roomCard = document.createElement('div');
+                roomCard.className = 'room-card';
+                roomCard.innerHTML = `
+                    <h4>${room.name}</h4>
+                    <p>${room.participants.length} participants</p>
+                    <button class="btn btn-primary" onclick="joinBreakoutRoom(${room.id})">Join Room</button>
+                `;
+                roomGrid.appendChild(roomCard);
+            });
+        }
+
+        function addBreakoutRoom() {
+            const roomName = prompt('Enter room name:');
+            if (roomName) {
+                breakoutRooms.push({
+                    id: breakoutRooms.length + 1,
+                    name: roomName,
+                    participants: []
+                });
+                loadBreakoutRooms();
+                showNotification(`Room "${roomName}" created`, 'success');
+            }
+        }
+
+        function joinBreakoutRoom(roomId) {
+            const room = breakoutRooms.find(r => r.id === roomId);
+            if (room) {
+                showNotification(`Joined "${room.name}"`, 'success');
+            }
+        }
+
+        function hideBreakoutRooms() {
+            document.getElementById('breakoutRooms').classList.add('hidden');
+        }
+
+        // Advanced Settings
+        function toggleVirtualBackground() {
+            virtualBackgroundEnabled = !virtualBackgroundEnabled;
+            showNotification(virtualBackgroundEnabled ? 'Virtual background enabled' : 'Virtual background disabled', 'success');
+        }
+
+        function toggleNoiseCancellation() {
+            noiseCancellationEnabled = !noiseCancellationEnabled;
+            showNotification(noiseCancellationEnabled ? 'Noise cancellation enabled' : 'Noise cancellation disabled', 'success');
+        }
+
+        function adjustVideoQuality() {
+            const quality = prompt('Select quality (low/medium/high):', 'medium');
+            if (quality) {
+                showNotification(`Video quality set to ${quality}`, 'success');
+            }
+        }
+
+        function showMeetingInfo() {
+            if (currentMeeting) {
+                alert(`Meeting: ${currentMeeting.title}\nDuration: ${currentMeeting.duration} minutes\nParticipants: ${participants.length + 1}\nRecording: ${isRecording ? 'Active' : 'Inactive'}`);
+            }
+        }
+
+        function applyMeetingSettings() {
+            const videoQuality = document.getElementById('videoQuality').value;
+            const noiseCancellation = document.getElementById('noiseCancellation').checked;
+            const echoCancellation = document.getElementById('echoCancellation').checked;
+            const virtualBackground = document.getElementById('virtualBackground').value;
+            
+            noiseCancellationEnabled = noiseCancellation;
+            virtualBackgroundEnabled = virtualBackground !== 'none';
+            
+            hideModal('meetingSettingsModal');
+            showNotification('Meeting settings applied', 'success');
+        }
+
+        function endMeeting() {
+            if (confirm('Are you sure you want to end the meeting for everyone?')) {
+                if (currentMeeting) {
+                    currentMeeting.status = 'ended';
+                    currentMeeting.recording = false;
+                }
+                
+                // Stop all streams
+                if (localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                }
+                
+                if (peerConnection) {
+                    peerConnection.close();
+                }
+                
+                // Reset variables
+                localStream = null;
+                remoteStream = null;
+                peerConnection = null;
+                currentMeeting = null;
+                isRecording = false;
+                isMuted = false;
+                isVideoOn = true;
+                isScreenSharing = false;
+                participants = [];
+                chatMessages = [];
+                
+                // Hide video room
+                document.getElementById('videoRoom').classList.add('hidden');
+                document.getElementById('recordingIndicator').style.display = 'none';
+                document.getElementById('whiteboardContainer').classList.remove('active');
+                
+                // Reset controls
+                document.getElementById('muteBtn').className = 'control-btn mute';
+                document.getElementById('videoBtn').className = 'control-btn video';
+                document.getElementById('recordBtn').classList.remove('active');
+                
+                loadMeetings();
+                showNotification('Meeting ended successfully', 'success');
+            }
+        }
+
+        // Meeting Management
+        function loadMeetings() {
+            const meetingsList = document.getElementById('meetingsList');
+            meetingsList.innerHTML = '';
+            
+            const activeMeetings = meetings.filter(m => m.status !== 'ended');
+            
+            if (activeMeetings.length === 0) {
+                meetingsList.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No active meetings</p>';
+                return;
+            }
+            
+            activeMeetings.forEach(meeting => {
+                const meetingCard = createMeetingCard(meeting);
+                meetingsList.appendChild(meetingCard);
+            });
+        }
+
+        function createMeetingCard(meeting) {
+            const card = document.createElement('div');
+            card.className = 'candidate-card fade-in';
+            
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div>
+                        <h3 style="margin-bottom: 5px;">${meeting.title}</h3>
+                        <p style="color: #666; font-size: 14px;">${meeting.date} at ${meeting.time}</p>
+                    </div>
+                    <div style="background: ${meeting.status === 'live' ? '#28a745' : '#ffc107'}; color: ${meeting.status === 'live' ? 'white' : '#212529'}; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold;">
+                        ${meeting.status === 'live' ? 'Live' : 'Scheduled'}
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                    <div class="detail-item">
+                        <span>⏱️</span>
+                        <span>${meeting.duration} minutes</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>👥</span>
+                        <span>${meeting.participants.length} participants</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>🎥</span>
+                        <span>${meeting.features.recording ? 'Recording enabled' : 'No recording'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>🤖</span>
+                        <span>${meeting.features.ai ? 'AI assistant' : 'Standard meeting'}</span>
+                    </div>
+                </div>
+                <div style="background: #f8f9fa; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>Participants:</strong> ${meeting.participants.join(', ')}
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-success" onclick="joinMeetingById(${meeting.id})">Join Meeting</button>
+                    <button class="btn btn-secondary" onclick="editMeeting(${meeting.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="cancelMeeting(${meeting.id})">Cancel</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function joinMeetingById(meetingId) {
+            const meeting = meetings.find(m => m.id === meetingId);
+            if (meeting) {
+                currentMeeting = meeting;
+                meeting.status = 'live';
+                startInstantMeeting();
+            }
+        }
+
+        function editMeeting(meetingId) {
+            const meeting = meetings.find(m => m.id === meetingId);
+            if (meeting) {
+                document.getElementById('meetingTitle').value = meeting.title;
+                document.getElementById('meetingParticipants').value = meeting.participants.join(', ');
+                showModal('scheduleMeetingModal');
+            }
+        }
+
+        function cancelMeeting(meetingId) {
+            if (confirm('Are you sure you want to cancel this meeting?')) {
+                const meetingIndex = meetings.findIndex(m => m.id === meetingId);
+                if (meetingIndex > -1) {
+                    meetings.splice(meetingIndex, 1);
+                    loadMeetings();
+                    showNotification('Meeting cancelled successfully', 'success');
+                }
+            }
+        }
+
+        function createScheduledMeeting() {
+            const title = document.getElementById('meetingTitle').value;
+            const dateTime = document.getElementById('meetingDateTime').value;
+            const duration = document.getElementById('meetingDuration').value;
+            const participants = document.getElementById('meetingParticipants').value;
+            const enableRecording = document.getElementById('enableRecording').checked;
+            const enableWhiteboard = document.getElementById('enableWhiteboard').checked;
+            const enableBreakout = document.getElementById('enableBreakout').checked;
+            const enableAI = document.getElementById('enableAI').checked;
+            
+            if (!title || !dateTime) {
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
+            
+            const date = new Date(dateTime);
+            
+            const newMeeting = {
+                id: meetings.length + 1,
+                title: title,
+                date: date.toISOString().split('T')[0],
+                time: date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+                duration: parseInt(duration),
+                status: "scheduled",
+                participants: participants.split(',').map(p => p.trim()).filter(p => p),
+                features: {
+                    recording: enableRecording,
+                    whiteboard: enableWhiteboard,
+                    breakout: enableBreakout,
+                    ai: enableAI
+                }
+            };
+            
+            meetings.push(newMeeting);
+            hideModal('scheduleMeetingModal');
+            loadMeetings();
+            
+            document.getElementById('scheduledInterviews').textContent = 
+                meetings.filter(m => m.status === 'scheduled').length;
+            
+            // Clear form
+            document.getElementById('meetingTitle').value = '';
+            document.getElementById('meetingDateTime').value = '';
+            document.getElementById('meetingParticipants').value = '';
+            
+            showNotification('Advanced meeting scheduled successfully! AI-powered features enabled.', 'success');
+        }
+
+        // AI Assistant Functions
+        function toggleAIChat() {
+            const aiChat = document.getElementById('aiChat');
+            aiChat.classList.toggle('show');
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'ai-message user';
+                userMessage.textContent = message;
+                document.getElementById('aiChatMessages').appendChild(userMessage);
+                
+                input.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = document.createElement('div');
+                    aiResponse.className = 'ai-message assistant';
+                    aiResponse.textContent = getAIResponse(message);
+                    document.getElementById('aiChatMessages').appendChild(aiResponse);
+                    
+                    // Scroll to bottom
+                    const chatMessages = document.getElementById('aiChatMessages');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        function handleAIKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendAIMessage();
+            }
+        }
+
+        function getAIResponse(message) {
+            const responses = {
+                'schedule': 'I can help you schedule interviews! Would you like me to find the best time slots based on candidate availability?',
+                'candidate': 'I\'ve analyzed the candidate profiles. Sarah Johnson has a 94% match score for the Senior Software Engineer position. Would you like me to schedule an interview?',
+                'interview': 'For technical interviews, I recommend a 60-minute session with coding challenges. I can set up the meeting with screen sharing and whiteboard features.',
+                'match': 'Based on AI analysis, I\'ve found 3 highly compatible candidates for your open positions. Their skills align perfectly with your requirements.',
+                'help': 'I can assist with candidate matching, interview scheduling, meeting insights, and hiring recommendations. What would you like help with?'
+            };
+            
+            const lowerMessage = message.toLowerCase();
+            for (const [key, response] of Object.entries(responses)) {
+                if (lowerMessage.includes(key)) {
+                    return response;
+                }
+            }
+            
+            return 'I understand you\'re asking about hiring and recruitment. I can help with candidate analysis, interview scheduling, and providing insights. Could you be more specific about what you need?';
+        }
+
+        // Utility Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.classList.toggle('show');
+            
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown-content').forEach(d => {
+                if (d.id !== dropdownId) {
+                    d.classList.remove('show');
+                }
+            });
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type} show`;
+            notification.innerHTML = `<strong>${type === 'error' ? 'Error!' : type === 'warning' ? 'Warning!' : 'Success!'}</strong> ${message}`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                showNotification(`${files.length} file(s) uploaded and analyzed by AI successfully!`, 'success');
+                
+                // Simulate AI analysis
+                setTimeout(() => {
+                    showNotification('AI analysis complete: Found 2 potential matches for uploaded resumes.', 'success');
+                }, 2000);
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default datetime for meeting modal
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+            document.getElementById('meetingDateTime').value = now.toISOString().slice(0, 16);
+            
+            // Load initial content
+            loadJobs();
+            loadCandidates();
+            loadMeetings();
+            
+            // Add animation to stats
+            setTimeout(() => {
+                document.querySelectorAll('.stat-number').forEach(stat => {
+                    stat.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        stat.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            }, 500);
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.control-dropdown')) {
+                    document.querySelectorAll('.dropdown-content').forEach(d => {
+                        d.classList.remove('show');
+                    });
+                }
+            });
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>
